@@ -2,10 +2,10 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Trabajos de Investigación on CA2HFW - Radioaficionado</title>
-    <link>http://localhost:1313/investigacion/</link>
+    <link>https://ca2hfw.github.io/investigacion/</link>
     <description>Recent content in Trabajos de Investigación on CA2HFW - Radioaficionado</description>
     <generator>Hugo</generator>
     <language>es-cl</language>
-    <atom:link href="http://localhost:1313/investigacion/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://ca2hfw.github.io/investigacion/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

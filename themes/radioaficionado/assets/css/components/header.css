@@ -1,11 +1,11 @@
 header {
-  background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%);
-  border-bottom: 2px solid #dc4632;
+  background: linear-gradient(180deg, #12121a 0%, #0a0a0f 100%);
+  border-bottom: 1px solid rgba(0, 240, 255, 0.3);
   padding: 1rem 0;
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 30px rgba(0, 240, 255, 0.1);
 }
 
 .site-header {
@@ -17,12 +17,12 @@ header {
 }
 
 .site-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'Orbitron', 'Rajdhani', sans-serif;
   font-size: 1.5rem;
   font-weight: 700;
-  letter-spacing: 3px;
-  color: #ff6347;
-  text-shadow: 0 0 15px rgba(220, 70, 50, 0.5);
+  letter-spacing: 4px;
+  color: #00f0ff;
+  text-shadow: 0 0 20px rgba(0, 240, 255, 0.5), 0 0 40px rgba(0, 240, 255, 0.3);
 }
 
 .site-title a {
@@ -32,8 +32,8 @@ header {
 
 .site-subtitle {
   font-size: 0.75rem;
-  color: #666;
-  letter-spacing: 2px;
+  color: #8888aa;
+  letter-spacing: 3px;
   text-transform: uppercase;
 }
 
@@ -53,22 +53,27 @@ nav li {
 nav a {
   display: block;
   padding: 0.5rem 1rem;
-  color: #a0a0a0;
+  color: #8888aa;
   font-size: 0.85rem;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
   text-transform: uppercase;
   border-radius: 4px;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
 }
 
 nav a:hover {
-  color: #fff;
-  background: rgba(220, 70, 50, 0.2);
+  color: #00f0ff;
+  background: rgba(0, 240, 255, 0.1);
+  border-color: rgba(0, 240, 255, 0.3);
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
 }
 
 nav a.active {
-  color: #ff6347;
-  background: rgba(220, 70, 50, 0.15);
+  color: #00f0ff;
+  background: rgba(0, 240, 255, 0.15);
+  border-color: rgba(0, 240, 255, 0.3);
+  text-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
 }
 
 @media (max-width: 600px) {

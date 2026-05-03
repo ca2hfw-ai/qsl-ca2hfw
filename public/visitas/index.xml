@@ -2,10 +2,10 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Libro de Visitas on CA2HFW - Radioaficionado</title>
-    <link>http://localhost:1313/visitas/</link>
+    <link>https://ca2hfw.github.io/visitas/</link>
     <description>Recent content in Libro de Visitas on CA2HFW - Radioaficionado</description>
     <generator>Hugo</generator>
     <language>es-cl</language>
-    <atom:link href="http://localhost:1313/visitas/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://ca2hfw.github.io/visitas/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
