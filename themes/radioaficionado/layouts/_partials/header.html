@@ -1,0 +1,15 @@
+<header>
+  <div class="container">
+    <div class="site-header">
+      <div>
+        <div class="site-title">
+          <a href="{{ "/" | relLangURL }}">{{ site.Title }}</a>
+        </div>
+        {{ with site.Params.callsign }}
+        <div class="site-subtitle">{{ . }} · {{ site.Params.qth }}</div>
+        {{ end }}
+      </div>
+      {{ partial "menu.html" (dict "menuID" "main" "page" .) }}
+    </div>
+  </div>
+</header>

@@ -1,0 +1,36 @@
+baseURL = 'https://ca2hfw.github.io/'
+languageCode = 'es-cl'
+title = 'CA2HFW - Radioaficionado'
+theme = 'radioaficionado'
+
+[params]
+  description = "Sitio de radioaficionado CA2HFW - La Serena, Chile"
+  author = "Humberto 'Moni' Fuentes"
+  callsign = "CA2HFW"
+  qth = "La Serena, Chile"
+  grid = "FG40"
+
+[[menu.main]]
+  name = "Inicio"
+  url = "/"
+  weight = 1
+
+[[menu.main]]
+  name = "Fotos"
+  url = "/fotos/"
+  weight = 2
+
+[[menu.main]]
+  name = "Investigación"
+  url = "/investigacion/"
+  weight = 3
+
+[[menu.main]]
+  name = "QSL"
+  url = "/qsl/"
+  weight = 4
+
+[[menu.main]]
+  name = "Libro de Visitas"
+  url = "/visitas/"
+  weight = 5
