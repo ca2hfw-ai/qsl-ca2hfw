@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<!-- saved from url=(0043)file:///C:/Users/hafm3/Downloads/index.html -->
-<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="es">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>QSL Digital — CA2HFW</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
@@ -67,9 +67,11 @@ h2{font-family:'Orbitron',sans-serif;font-size:clamp(22px,5vw,32px);letter-spaci
   <p class="sub">✦ Descarga tu tarjeta QSL digital ✦</p>
   <div class="search-row">
     <input id="qsl-input" type="text" placeholder="Ingresa tu indicativo..." maxlength="12" autocomplete="off">
-    <button id="qsl-btn" onclick="qslBuscar()" disabled="">Buscar QSO</button>
+    <button id="qsl-btn" onclick="qslBuscar()" disabled>Buscar QSO</button>
   </div>
-  <p id="qsl-msg" style="color: rgb(255, 144, 128);">⚠ No se pudo cargar la base de datos.</p>
+  <p id="qsl-msg">Cargando base de datos...</p>
+
+  <div id="qso-selector" style="display:none;background:rgba(220,70,50,.08);border:1px solid rgba(220,70,50,.3);border-radius:8px;padding:14px 16px;margin-bottom:12px;"></div>
 
   <div id="qsl-card-wrap">
     <div id="qsl-card">
@@ -90,12 +92,12 @@ h2{font-family:'Orbitron',sans-serif;font-size:clamp(22px,5vw,32px);letter-spaci
         <div>
           <div class="qc-table">
             <table>
-              <tbody><tr><th>DATE</th><th>UTC</th><th>BAND</th><th>MODE</th></tr>
+              <tr><th>DATE</th><th>UTC</th><th>BAND</th><th>MODE</th></tr>
               <tr>
                 <td id="qc-date">—</td><td id="qc-utc">—</td>
                 <td id="qc-band">—</td><td id="qc-mode">—</td>
               </tr>
-            </tbody></table>
+            </table>
           </div>
           <div class="qc-rst">
             <div><div class="qc-rl">RST SENT</div><div class="qc-rv" id="qc-rs">—</div></div>
@@ -114,8 +116,8 @@ h2{font-family:'Orbitron',sans-serif;font-size:clamp(22px,5vw,32px);letter-spaci
       </div>
     </div>
     <div id="qsl-dl-row">
-      <button class="qsl-dl-btn" onclick="qslDescargar(&#39;png&#39;)">↓ Descargar PNG</button>
-      <button class="qsl-dl-btn" onclick="qslDescargar(&#39;jpg&#39;)">↓ Descargar JPG</button>
+      <button class="qsl-dl-btn" onclick="qslDescargar('png')">↓ Descargar PNG</button>
+      <button class="qsl-dl-btn" onclick="qslDescargar('jpg')">↓ Descargar JPG</button>
     </div>
     <div id="qsl-dl-status"></div>
   </div>
@@ -144,29 +146,61 @@ fetch(GITHUB_URL + '?t=' + Date.now())
 function qslBuscar(){
   var call = document.getElementById('qsl-input').value.trim().toUpperCase();
   if(!call){ document.getElementById('qsl-msg').textContent='Ingresa un indicativo.'; return; }
-  var found = null;
-  for(var i = QSO_LOG.length-1; i >= 0; i--){
-    if(QSO_LOG[i].to === call){ found = QSO_LOG[i]; break; }
-  }
+
+  // Find ALL QSOs matching the callsign
+  var found = QSO_LOG.filter(function(q){ return q.to === call; });
+
   var msg = document.getElementById('qsl-msg');
   var wrap = document.getElementById('qsl-card-wrap');
-  if(found){
-    document.getElementById('qc-to').textContent   = found.to;
-    document.getElementById('qc-date').textContent = found.date || '—';
-    document.getElementById('qc-utc').textContent  = found.utc  || '—';
-    document.getElementById('qc-band').textContent = found.band || '—';
-    document.getElementById('qc-mode').textContent = found.mode || '—';
-    document.getElementById('qc-rs').textContent   = found.rstS || '59';
-    document.getElementById('qc-rr').textContent   = found.rstR || '59';
-    wrap.style.display = 'block';
-    document.getElementById('qsl-dl-status').textContent = '';
+  var selector = document.getElementById('qso-selector');
+
+  if(found.length > 0){
     msg.style.color = '#80e080';
-    msg.textContent = '✓ QSO confirmado — ¡' + call + ' tienes una QSL de CA2HFW!';
+    msg.textContent = '✓ ' + found.length + ' QSO(s) encontrado(s) con ' + call + ' — ¡Descarga tu QSL!';
+
+    // If multiple QSOs, show selector buttons
+    if(found.length > 1){
+      var html = '<p style="font-family:Share Tech Mono,monospace;font-size:10px;letter-spacing:2px;color:#ff9080;margin-bottom:10px;">▸ SELECCIONA EL QSO A DESCARGAR</p>';
+      found.forEach(function(q, i){
+        html += '<button onclick="loadQSO('+i+')" style="display:block;width:100%;margin-bottom:8px;background:rgba(220,70,50,.15);border:1px solid rgba(220,70,50,.4);color:#ffccc0;font-family:Share Tech Mono,monospace;font-size:10px;letter-spacing:1px;padding:8px 12px;border-radius:4px;cursor:pointer;text-align:left;transition:all .2s" onmouseover="this.style.background=\'rgba(220,70,50,.3)\'" onmouseout="this.style.background=\'rgba(220,70,50,.15)\'">'
+          + '📅 ' + (q.date||'—') + '  🕐 ' + (q.utc||'—') + '  📻 ' + (q.band||'—') + '  📡 ' + (q.mode||'—')
+          + '</button>';
+      });
+      selector.innerHTML = html;
+      selector.style.display = 'block';
+    } else {
+      selector.style.display = 'none';
+    }
+
+    // Load first (or only) QSO into card
+    window._foundQSOs = found;
+    loadQSO(0);
+
   } else {
     wrap.style.display = 'none';
+    selector.style.display = 'none';
     msg.style.color = '#ff9080';
     msg.textContent = '✗ No se encontró QSO con ' + call + '. ¡Próximamente en el aire! 73';
   }
+}
+
+function loadQSO(idx){
+  var q = window._foundQSOs[idx];
+  if(!q) return;
+  document.getElementById('qc-to').textContent   = q.to;
+  document.getElementById('qc-date').textContent = q.date || '—';
+  document.getElementById('qc-utc').textContent  = q.utc  || '—';
+  document.getElementById('qc-band').textContent = q.band || '—';
+  document.getElementById('qc-mode').textContent = q.mode || '—';
+  document.getElementById('qc-rs').textContent   = q.rstS || '59';
+  document.getElementById('qc-rr').textContent   = q.rstR || '59';
+  document.getElementById('qsl-card-wrap').style.display = 'block';
+  document.getElementById('qsl-dl-status').textContent = '';
+  // Highlight selected button
+  var btns = document.getElementById('qso-selector').querySelectorAll('button');
+  btns.forEach(function(b,i){ b.style.borderColor = i===idx ? '#dc4632' : 'rgba(220,70,50,.4)'; b.style.color = i===idx ? '#fff' : '#ffccc0'; });
+  // Update filename with date
+  window._currentQSO = q;
 }
 
 document.getElementById('qsl-input').addEventListener('keydown', function(e){
@@ -181,15 +215,14 @@ function qslDescargar(fmt){
   html2canvas(card, {scale: 1654/card.offsetWidth, useCORS:true, allowTaint:true, backgroundColor:null, logging:false})
     .then(function(canvas){
       var call = document.getElementById('qsl-input').value.trim().toUpperCase() || 'QSL';
+      var date = (window._currentQSO && window._currentQSO.date) ? '_' + window._currentQSO.date.replace(/\//g,'-') : '';
       var a = document.createElement('a');
       a.href = canvas.toDataURL(fmt==='jpg'?'image/jpeg':'image/png', 0.95);
-      a.download = 'QSL_CA2HFW_' + call + '.' + fmt;
+      a.download = 'QSL_CA2HFW_' + call + date + '.' + fmt;
       a.click();
       st.style.color = '#80e080';
-      st.textContent = '✓ Descargada: QSL_CA2HFW_' + call + '.' + fmt;
+      st.textContent = '✓ Descargada: QSL_CA2HFW_' + call + date + '.' + fmt;
     }).catch(function(){ st.style.color='#e06050'; st.textContent='⚠ Error. Intenta de nuevo.'; });
 }
 </script>
-
-
-</body></html>
+</body>
